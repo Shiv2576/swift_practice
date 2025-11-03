@@ -7,13 +7,12 @@ class Person {
         self.age = age
     }
 
-    func celebrateBirthday() {
-        age += 1  // MUTABLE - can change properties
-        print("Happy birthday! Now \(age) years old")
+    func HappyBirthday() {
+        age += 1
+        print("Happy \(age)th Birthday")
     }
 }
 
-// Inheritance
 class Student: Person {
     var grade: String
 
@@ -23,8 +22,6 @@ class Student: Person {
     }
 }
 
-let person = Person(name: "John", age: 25)
-person.age = 26  // ✅ Can mutate (if class instance is let, but properties are var)
-person.celebrateBirthday()
-
+let person = Person(name: "Allen", age: 25)
+person.HappyBirthday()
 print(person.age)
