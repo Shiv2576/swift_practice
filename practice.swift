@@ -1,30 +1,33 @@
-class Person {
-    var name: String
-    var age: Int
+protocol MessageClient {
+    func sendMessage(to recipient: String, message: String) async throws
+}
 
-    init(name: String, age: Int) {
-        self.name = name
-        self.age = age
-    }
+class EmailClient: MessageClient {
 
-    func celebrateBirthday() {
-        age += 1  // MUTABLE - can change properties
-        print("Happy birthday! Now \(age) years old")
+    func sendMessage(to recipient: String, message: String) async throws {
+        print("📧 Sending email to \(recipient): \(message)")
     }
 }
 
-// Inheritance
-class Student: Person {
-    var grade: String
-
-    init(name: String, age: Int, grade: String) {
-        self.grade = grade
-        super.init(name: name, age: age)
+class SMSClient: MessageClient {
+    func sendMessage(to recipient: String, message: String) async throws {
+        print("🔔 Sending push to \(recipient): \(message)")
     }
 }
 
-let person = Person(name: "John", age: 25)
-person.age = 26  // ✅ Can mutate (if class instance is let, but properties are var)
-person.celebrateBirthday()
+class NotificationService {
+    private let messageClient: MessageClient
 
-print(person.age)
+    init(messageClient: MessageClient) {
+        self.messageClient = messageClient
+    }
+
+    func sendnotification(to user: String, content: String) async {
+        do {
+            try await messageClient.sendMessage(to: user, message: content)
+            print("✅ Notification sent successfully to \(user)")
+        } catch {
+            print("❌ Failed to send notification: \(error)")
+        }
+    }
+}
