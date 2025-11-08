@@ -1,33 +1,20 @@
-protocol MessageClient {
-    func sendMessage(to recipient: String, message: String) async throws
+actor Counter {
+    private var count = 0
+
+    func inc() {
+        count += 1
+    }
+
+    func getCount() -> Int {
+        return count
+    }
+
 }
 
-class EmailClient: MessageClient {
+let user = Counter()
 
-    func sendMessage(to recipient: String, message: String) async throws {
-        print("📧 Sending email to \(recipient): \(message)")
-    }
-}
+Task {
+    await user.inc()
+    print(await user.getCount())
 
-class SMSClient: MessageClient {
-    func sendMessage(to recipient: String, message: String) async throws {
-        print("🔔 Sending push to \(recipient): \(message)")
-    }
-}
-
-class NotificationService {
-    private let messageClient: MessageClient
-
-    init(messageClient: MessageClient) {
-        self.messageClient = messageClient
-    }
-
-    func sendnotification(to user: String, content: String) async {
-        do {
-            try await messageClient.sendMessage(to: user, message: content)
-            print("✅ Notification sent successfully to \(user)")
-        } catch {
-            print("❌ Failed to send notification: \(error)")
-        }
-    }
 }

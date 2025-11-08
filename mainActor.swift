@@ -11,7 +11,7 @@ let task = Task {
 }
 
 // Wait a bit and then get the result
-Thread.sleep(forTimeInterval: 1)
+// Thread.sleep(forTimeInterval: 1)
 if let result = try? await task.result.get() {
     print(result)
 } else {
